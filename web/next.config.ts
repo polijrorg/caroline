@@ -1,6 +1,10 @@
 import { type NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  env: {
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    EMAIL_FROM: process.env.EMAIL_FROM,
+  },
   turbopack: {
     rules: {
       '*.svg': {

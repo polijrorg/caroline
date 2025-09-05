@@ -38,12 +38,13 @@ function CadastroForm() {
         return;
       }
 
-      const result = await authClient.signUp.email({
-        name,
-        email,
-        password,
-        callbackURL: "/",
-      });
+      const result = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, password }),
+      }).then(res => res.json());
 
       if (result.error) {
         if (result.error.message?.includes('already exists') || result.error.message?.includes('duplicate')) {
