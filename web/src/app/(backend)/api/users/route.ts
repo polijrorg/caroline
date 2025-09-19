@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { registerSchema } from "@/backend/schemas";
 import { blockForbiddenRequests, returnInvalidDataErrors, validBody, zodErrorHandler } from "@/utils/api";
-import { findUserByEmail, getAllUsers } from "../../services/users";
-import { authClient } from "@/lib/auth-client";
+import { findUserByEmail, getAllUsers, updateUser } from "../../services/users";
 import { AllowedRoutes } from "@/types";
+import { auth } from "@/auth";
 
 const allowedRoles: AllowedRoutes = {
   GET: ["SUPER_ADMIN", "ADMIN"]
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     
     const validatedData = validationResult.data
 
-    const { name, email, password } = validatedData;
+    const { name, email, password, dataNasc, sobrenome } = validatedData;
 
     const existingUser = await findUserByEmail(email);
 
@@ -54,11 +54,15 @@ export async function POST(request: NextRequest) {
       );
     }    
     
-    const user = await authClient.signUp.email({
-      name,
-      email,
-      password,
-      callbackURL: "/",
+    const user = await auth.api.signUpEmail({
+      body: {
+        name,
+        email,
+        password,
+        dataNasc,
+        sobrenome,
+        callbackURL: "/",
+      }
     });
 
     return NextResponse.json(
