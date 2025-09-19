@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "name": "monorepo-base",
+  "name": "caroline",
   "type": "collection",
   "ignore": [
     "node_modules",

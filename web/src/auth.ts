@@ -29,18 +29,17 @@ export const auth = betterAuth({
         },
     },
     user: {
-        deleteUser: {
-            enabled: true
-        },
+      additionalFields: {
+        dataNasc: { type: "date", required: true },
+        sobrenome: { type: "string", required: true },
+      },
+      deleteUser: {
+          enabled: true
+      },
         changeEmail: {
             enabled: true,
         },
 
-        //adicionei sobrenome e data nasc
-        fields: {
-            sobrenome: { type: "string", required: true },
-            dataNasc: { type: "date", required: true },
-        },
         // sendChangeEmailVerification: async ({ user, newEmail, url, token }, request) => {
         //     await sendEmail({
         //         to: user.email, // verification email must be sent to the current user email to approve the change

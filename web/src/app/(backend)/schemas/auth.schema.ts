@@ -22,11 +22,9 @@ const registerBaseObject = z.object({
         .transform(str => str.trim()),
 
     dataNasc: z
-        .string()
-        .refine((val) => !isNaN(Date.parse(val)), {
-            message: "Data de nascimento inválida",
-        }),
-
+      .string()
+      .refine(val => !isNaN(Date.parse(val)), { message: "Formato inválido de data" })
+      .transform(val => new Date(val)),
 
     email: emailSchema,
     password: passwordSchema,
