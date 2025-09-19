@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { registerSchema } from "@/backend/schemas";
 import { blockForbiddenRequests, returnInvalidDataErrors, validBody, zodErrorHandler } from "@/utils/api";
-import { findUserByEmail, getAllUsers, updateUser } from "../../services/users";
+import { findUserByEmail, getAllUsers } from "../../services/users";
 import { AllowedRoutes } from "@/types";
 import { auth } from "@/auth";
 

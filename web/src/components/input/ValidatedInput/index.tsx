@@ -20,6 +20,7 @@ interface ValidatedInputProps extends InputHTMLAttributes<HTMLInputElement> {
   inputClassName?: string;
   iconContainerClassName?: string;
   children?: React.ReactNode;
+  noLabel?: boolean;
 }
 
 function ValidatedInput({
@@ -37,6 +38,7 @@ function ValidatedInput({
   iconContainerClassName,
   children,
   type = 'text',
+  noLabel = false,
   ...rest
 }: ValidatedInputProps) {
   const [inputValue, setInputValue] = useState<string | number | readonly string[]>(value || '');
@@ -78,10 +80,10 @@ function ValidatedInput({
 
   return (
     <div className={cn('flex flex-col', containerClassName)}>
-      <label className={cn('text-lg font-medium', labelClassName)} htmlFor={name}>
+      {!noLabel && <label className={cn('text-sm', labelClassName)} htmlFor={name}>
         {title}
         {children}
-      </label>
+      </label>}
 
       <div className={cn('relative inline-block', inputContainerClassName)}>
         <input
