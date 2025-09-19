@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await validBody(request);
     const validationResult = registerSchema.safeParse(body);
-
+    console.log(validationResult)
     if (!validationResult.success) {
       return returnInvalidDataErrors(validationResult.error);
     }
