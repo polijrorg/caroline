@@ -4,29 +4,25 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-rubik: var(--font-rubik);
+  --font-poppins: var(--font-poppins);
 
-  --color-pink-50: #FDF7FB;
-  --color-pink-100: #EED8E5;
-  --color-pink-200: #EDB6D6;
-  --color-pink-300: #E98BC2;
-  --color-pink-400: #E55DB1;
-  --color-pink-500: #E91695;
-  --color-pink-600: hsl(321, 65%, 40%);
-  --color-pink-700: #6E1C53;
-  --color-pink-800: #431931;
-  --color-pink-900: hsl(321, 30%, 11%);
-  --color-pink-950: #12080E;
+  --color-primary-200: #D2E7FF;
+  --color-primary-400: #003B3F;
+  --color-primary-500: #07303E;
 }
 
 body {
-  font-family: var(--font-rubik), Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--color-pink-50);
+  font-family: var(--font-poppins), Tahoma, Geneva, Verdana, sans-serif;
   overflow-x: hidden;
 }
 ::selection {
-  color: var(--color-pink-100);
-  background-color: var(--color-pink-500);
+  color: var(--color-primary-100);
+  background-color: var(--color-primary-500);
+}
+
+@utility main-header {
+  font-size: 48px;
+  font-weight: 700;
 }
 
 @utility button-md {

@@ -6,10 +6,8 @@ import type { Role } from "./generated/prisma";
 // Configuration for different page types
 const ROUTE_CONFIG = {
   authRequired: [
-    "/aprender",
-    "/dashboard",
-    "/perfil",
-    "/settings",
+    "/",
+    "/dashboard/**",
   ],
   
   // Pages that require ADMIN or SUPER_ADMIN role
