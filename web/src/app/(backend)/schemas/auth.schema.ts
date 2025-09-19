@@ -28,19 +28,14 @@ const registerBaseObject = z.object({
 
     email: emailSchema,
     password: passwordSchema,
-    confirmPassword: z.string()
 });
 
 export const registerSchema = registerBaseObject
-    .refine((data) => data.password === data.confirmPassword, {
-        error: "Senhas não conferem",
-        path: ["confirmPassword"],
-    })
 
 // devemos atualizar email e senha apenas via better-auth
 // (para garantir que a verificação de email e o hash da senha sejam feitos corretamente)
 export const patchSchema = registerBaseObject
-    .omit({ email: true, password: true, confirmPassword: true }) // remove esses campos do schema aceito
+    .omit({ email: true, password: true }) // remove esses campos do schema aceito
     .partial() // manter a semântica de "patch" (todos opcionais)
     .strict() // ERRO se houver campos extras (ex: email enviado)
     .refine((obj) => Object.keys(obj).length > 0, {

@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { Rubik } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/common/ToastProvider";
 
-const rubik = Rubik({
-  variable: "--font-rubik",
+const poppins = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 })
 
 export const metadata: Metadata = {
-  title: "Noctiluz",
-  description: "Plataforma para olimpíadas científicas e reforço escolar",
+  title: "RIMA",
+  description: "Plataforma para saúde mental",
 };
 
 export default function RootLayout({
@@ -21,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${rubik.variable} antialiased`}
+        className={`${poppins.variable} antialiased`}
       >
         {children}
 

@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 
 import dynamic from 'next/dynamic';
 
-const GoogleAuthButton = dynamic(() => import('@/components/auth/GoogleLoginButton'));
 const CredentialsButton = dynamic(() => import('@/components/auth/CredentialsButton'));
 const ValidatedInput = dynamic(() => import('@/components/input/ValidatedInput'));
 
@@ -45,8 +44,9 @@ function LoginForm() {
   };
 
   return ( 
-    <div className="lg:w-[90%] xl:w-[80%]">
-      <h2 className="font-bold text-[40px] text-center leading-12">Continue seu aprendizado</h2>
+    <div className="lg:w-[90%] xl:w-[80%]"
+    style={{ background: "linear-gradient(21.76deg, #FFFFFF 39.47%, rgba(136, 179, 225, 0.5) 100%)" }}>
+      <h1 className="main-header mx-auto text-center">RIMA</h1>
       <form className="mt-6" onSubmit={handleSubmit}>
         <ValidatedInput 
           title="E-mail"
@@ -82,16 +82,8 @@ function LoginForm() {
 
         <CredentialsButton className="mt-6" disabled={loading}>Entrar</CredentialsButton>
       </form>
-      
-      <div className="flex items-center gap-4 py-5">
-        <div className="flex-grow h-0.5 bg-gray-400" />
-        <p className="text-gray-400 text-lg">ou</p>
-        <div className="flex-grow h-0.5 bg-gray-400" />
-      </div>
 
-      <GoogleAuthButton disabled={loading} text="Entrar com Google" />
-
-      <Link href='/cadastro' className="block w-fit mt-8 text-sm group">Ainda não tem uma conta? <span className="text-pink-500 colorTransition border-b border-transparent group-hover:border-pink-500">Cadastre-se</span></Link>
+      <Link href='/cadastro' className="block w-fit mt-8 text-sm group">Ainda não tem uma conta? <span className="text-blueHighlight underline">Cadastre-se</span></Link>
     </div>
    );
 }

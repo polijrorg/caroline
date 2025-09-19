@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { registerSchema } from "@/backend/schemas";
 import { blockForbiddenRequests, returnInvalidDataErrors, validBody, zodErrorHandler } from "@/utils/api";
-import { findUserByEmail, getAllUsers, updateUser } from "../../services/users";
+import { findUserByEmail, getAllUsers } from "../../services/users";
 import { AllowedRoutes } from "@/types";
 import { auth } from "@/auth";
 
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await validBody(request);
     const validationResult = registerSchema.safeParse(body);
-
+    console.log(validationResult)
     if (!validationResult.success) {
       return returnInvalidDataErrors(validationResult.error);
     }
