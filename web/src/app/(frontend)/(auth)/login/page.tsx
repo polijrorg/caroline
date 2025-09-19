@@ -1,19 +1,17 @@
-import Noctiluz from '@/components/svgs/noctiluz.svg'
 import LoginForm from './LoginForm';
 
 function LoginPage() {
   return ( 
-    <main className="lg:h-screen flex">
-      <div className="w-[55%] h-full flex flex-col gap-8 items-center justify-center">
-        <LoginForm />
-      </div>
-
-      <div className="login-background h-full w-[45%] flex flex-col items-center py-32">
-        <div className="text-pink-500 flex gap-4">
-          <Noctiluz className="w-[115px]" />
-          <h1 className='font-bold text-[64px]'>noctiluz</h1>
+    <main
+      className="min-h-screen w-full py-18 px-20 flex flex-col items-center justify-start"
+    >
+      <div className='flex w-full rounded-4xl bg-[#9ebcddcc]'>
+        <div className=' w-full h-full'></div>
+        <div className="w-full h-full flex flex-col gap-8 items-center justify-center">
+          <LoginForm />
         </div>
       </div>
+
     </main>
    );
 }
