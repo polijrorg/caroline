@@ -120,7 +120,7 @@ function CadastroForm() {
             <div className="flex justify-between gap-10 align-self-center">
               <ValidatedInput
                 title="Nome"
-                placeholder="Jose"
+                placeholder="Nome"
                 name="name"
                 type="text"
                 value={name}
@@ -134,7 +134,7 @@ function CadastroForm() {
               ><RequiredTag/></ValidatedInput>
               <ValidatedInput
                 title="Sobrenome"
-                placeholder="da Silva"
+                placeholder="Sobrenome"
                 name="sobrenome"
                 type="text"
                 value={sobrenome}
@@ -205,7 +205,7 @@ function CadastroForm() {
               />
             </p>
           </div>
-          <CredentialsButton disabled={loading} className="mt-6">Cadastre-se</CredentialsButton>
+          <CredentialsButton disabled={loading} className="mt-6 bg-azulProfundo w-fit mx-auto w-[292px]">Cadastre-se</CredentialsButton>
         </form>
         
         <Link href='/login' className="block w-fit mt-8 text-sm group text-blueHighlight underline">Já tem uma conta?</Link>
