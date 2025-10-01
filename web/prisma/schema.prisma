@@ -130,3 +130,24 @@ model Verification {
 
   @@map("verification")
 }
+
+model Modulo {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  titulo    String
+  descricao String?
+  aulas     Aula[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Aula {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  titulo    String
+  conteudo  String?
+  moduloId  String    @db.ObjectId
+  modulo    Modulo    @relation(fields: [moduloId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+
