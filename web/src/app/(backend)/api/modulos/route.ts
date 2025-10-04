@@ -8,7 +8,7 @@ export async function GET() {
 }
 
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     const body = await req.json();
     const parsed = createModuloSchema.safeParse(body);
 
