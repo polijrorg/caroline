@@ -1,5 +1,4 @@
 'use client'
-import { expo } from "@better-auth/expo";
 import Image from "next/image";
 
 interface UsersProps {

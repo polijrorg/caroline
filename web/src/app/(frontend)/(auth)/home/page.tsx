@@ -5,7 +5,6 @@ import ModuloCard from "./ModuloCard";
 import VideoCall from "./VideoCall";
 import ReturnCard from "./ReturnCard";
 import ProgressCard from "./ProgressCard";
-import { Video } from "lucide-react";
 
 function HomePage() {
   return (
