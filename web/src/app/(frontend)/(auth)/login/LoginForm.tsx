@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 import LoginOptionals from "@/components/auth/LoginOptionals";
+import Image from "next/image";
 
 import RequiredTag from "@/components/input/RequiredTag";
 import { authClient } from "@/lib/auth-client";
@@ -44,13 +45,12 @@ function LoginForm() {
   };
 
   return ( 
-    <div className="lg:w-[90%] xl:w-[80%]"
-    style={{ background: "linear-gradient(21.76deg, #FFFFFF 39.47%, rgba(136, 179, 225, 0.5) 100%)" }}>
-      <h1 className="main-header mx-auto text-center">RIMA</h1>
+    <div className="lg:w-[90%] xl:w-[80%] bg-transparent h-[90vh] flex flex-col items-center justify-center">
+      <div className=" bg-azulProfundo p-2.5 w-[84px] h-[87px] my-[20px] mx-auto" > <Image src="/Logo-Escuro.png" alt="Rima" width={64} height={64}/> </div>
       <form className="mt-6" onSubmit={handleSubmit}>
-        <ValidatedInput 
+        <ValidatedInput
           title="E-mail"
-          placeholder="exemplo@noctiluz.com.br"
+          placeholder="exemplo@rima.com.br"
           name="email"
           type="email"
           value={email}
@@ -61,7 +61,7 @@ function LoginForm() {
           required
         ><RequiredTag/></ValidatedInput>
         
-        <ValidatedInput 
+        <ValidatedInput
           title="Senha"
           placeholder="Insira sua senha"
           name="password"
@@ -78,12 +78,12 @@ function LoginForm() {
           required
         ><RequiredTag/></ValidatedInput>
 
-        <LoginOptionals />
+        <LoginOptionals /> 
 
-        <CredentialsButton className="mt-6" disabled={loading}>Entrar</CredentialsButton>
+        <CredentialsButton className="mt-6 bg-azulProfundo mx-auto w-[292px]" disabled={loading}>Entrar</CredentialsButton>
       </form>
 
-      <Link href='/cadastro' className="block w-fit mt-8 text-sm group">Ainda não tem uma conta? <span className="text-blueHighlight underline">Cadastre-se</span></Link>
+      <Link href='/cadastro' className="block w-fit mt-8 text-sm mx-auto group">Ainda não tem uma conta? <span className="text-blueHighlight underline">Cadastre-se</span></Link>
     </div>
    );
 }

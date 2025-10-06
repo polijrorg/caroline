@@ -6,9 +6,12 @@
 @theme {
   --font-poppins: var(--font-poppins);
 
-  --color-primary-200: #D2E7FF;
-  --color-primary-400: #003B3F;
-  --color-primary-500: #07303E;
+  --color-chumbo: #333333;
+  --color-azulProfundo: #172653;
+  --color-cinzaClarissimo: #F5F5F5;
+  --color-azulCeu: #4395CD;
+  --color-verdeMenta: #90C8B6;
+  
 
   --color-blueHighlight: #00A5B8;
 }

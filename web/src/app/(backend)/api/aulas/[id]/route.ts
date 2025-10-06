@@ -24,7 +24,7 @@ export async function GET(_req: Request, { params }: Params) {
 export async function PUT(req: Request, { params }: Params) {
     try {
         const body = await req.json();
-        const { titulo conteudo, moduloId } = body;
+        const { titulo, conteudo, moduloId } = body;
 
         const aula = await prisma.aula.update({
             where: { id: params.id },
