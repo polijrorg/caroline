@@ -205,7 +205,7 @@ function CadastroForm() {
               />
             </p>
           </div>
-          <CredentialsButton disabled={loading} className="mt-6 bg-azulProfundo w-fit mx-auto w-[292px]">Cadastre-se</CredentialsButton>
+          <CredentialsButton disabled={loading} className="mt-6 bg-azulProfundo mx-auto w-[292px]">Cadastre-se</CredentialsButton>
         </form>
         
         <Link href='/login' className="block w-fit mt-8 text-sm group text-blueHighlight underline">Já tem uma conta?</Link>
