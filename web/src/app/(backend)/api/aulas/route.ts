@@ -1,38 +1,27 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/generated/prisma";
+import { NextRequest, NextResponse } from "next/server";
+import { createAulaSchema } from "../../schemas/aulas.schema";
+import * as aulaService from "../../services/aulas/aulas";
 
 export async function GET() {
-    try {
-        const aulas = await prisma.aula.findMany({
-            include: {
-                modulo: true,
-            },
-            orderBy: { createdAt: "desc" },
-        });
-        return NextResponse.json(aulas);
-    } catch (error) {
-        console.error(error);
-        return NextResponse.json({ error: "Erro ao buscar aulas" }, { status: 500 });
-    }
+    const aulas = await aulaService.getAllAulas();
+    return NextResponse.json(aulas);
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+    const body = await req.json();
+
+    const parsed = createAulaSchema.safeParse(body);
+
+    if (!parsed.success) {
+        return NextResponse.json({ error: parsed.error.issues }, { status: 400 })
+    }
     try {
-        const body = await req.json();
-        const { titulo, conteudo, moduloId } = body;
-
-        if (!titulo || !moduloId) {
-            return NextResponse.json({ error: "Titulo e modulo sao obrigatórios" }, { status: 400 });
-        }
-
-        const aula = await prisma.aula.create({
-            data: { titulo, conteudo, moduloId },
-        });
-
+        const aula = await aulaService.createAula(parsed.data);
         return NextResponse.json(aula, { status: 201 });
 
-    } catch (error) {
-        console.error(error);
-        return NextResponse.json({ error: "Erro ao criar aula" }, { status: 500 });
+    }
+
+    catch {
+        return NextResponse.json({ error: "Erro ao criar aua" }, { status: 400 });
     }
 }

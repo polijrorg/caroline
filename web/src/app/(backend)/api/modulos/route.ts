@@ -1,14 +1,21 @@
-import { NextResponse } from 'next/server'
-import { prisma } from '@/app/(backend)/services/db'
+import { NextRequest, NextResponse } from 'next/server'
+import { createModuloSchema } from '../../schemas/modulos.schema'
+import * as moduloService from "../../services/modulos/modulos"
 
 export async function GET() {
-    const modulos = await prisma.modulo.findMany()
-    return NextResponse.json(modulos)
+    const modulos = await moduloService.getAllModulos();
+    return NextResponse.json(modulos);
 }
 
 
-export async function POST(request: Request) {
-    const data = await request.json()
-    const novoModulo = await prisma.modulo.create({ data })
-    return NextResponse.json(novoModulo, { status: 201 })
+export async function POST(req: NextRequest) {
+    const body = await req.json();
+    const parsed = createModuloSchema.safeParse(body);
+
+    if (!parsed.success) {
+        return NextResponse.json({ error: parsed.error.issues }, { status: 400 });
+    }
+
+    const modulo = await moduloService.createModulo(parsed.data);
+    return NextResponse.json(modulo, { status: 201 });
 }
