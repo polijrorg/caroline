@@ -21,8 +21,8 @@ body {
   overflow-x: hidden;
 }
 ::selection {
-  color: white;
-  background-color: var(--color-primary-500);
+  color: var(--color-cinzaClarissimo);
+  background-color: var(--color-azulProfundo);
 }
 
 @utility main-header {
