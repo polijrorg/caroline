@@ -16,7 +16,7 @@ enum Role {
 
 model User {
   // nao mexer >
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            String   @id @map("_id")
   name          String
   sobrenome     String
   dataNasc      DateTime
@@ -44,7 +44,7 @@ model Session {
   updatedAt DateTime
   ipAddress String?
   userAgent String?
-  userId    String    @db.ObjectId
+  userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
@@ -55,7 +55,7 @@ model Account {
   id                    String    @id @map("_id")
   accountId             String
   providerId            String
-  userId                String    @db.ObjectId
+  userId                String
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
@@ -118,7 +118,7 @@ model Aula {
 
 model AulaFavorita {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
+  userId    String
   aulaId    String   @db.ObjectId
   createdAt DateTime @default(now())
 
