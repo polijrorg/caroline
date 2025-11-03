@@ -4,5 +4,6 @@ export type AllowedRoutes = {
   GET?: Role[]
   POST?: Role[]
   PATCH?: Role[]
+  PUT?: Role[]
   DELETE?: Role[]
 }
