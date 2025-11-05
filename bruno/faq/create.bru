@@ -1,0 +1,26 @@
+meta {
+  name: create
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/{{folder}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "pergunta": "O que é o Projeto RIMA?",
+    "resposta": "O Projeto RIMA é uma plataforma de ensino online focada em programação e desenvolvimento de software, oferecendo cursos estruturados em módulos e aulas."
+  }
+}
+
+script:post-response {
+  if (res.body && res.body.id) {
+    bru.setVar("faqId", res.body.id);
+  } else {
+    console.log("No ID found in response");
+  }
+}

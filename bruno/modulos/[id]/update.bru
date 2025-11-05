@@ -1,0 +1,18 @@
+meta {
+  name: update
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{baseUrl}}/{{folder}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "titulo": "Módulo 1: Introdução à Programação (Atualizado)",
+    "descricao": "Aprenda os conceitos básicos de programação, incluindo variáveis, tipos de dados, estruturas de controle e funções."
+  }
+}

@@ -1,0 +1,22 @@
+meta {
+  name: reorder
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/aulas/reorder
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "aulas": [
+      {
+        "id": "{{aulaId}}",
+        "ordem": 1
+      }
+    ]
+  }
+}
