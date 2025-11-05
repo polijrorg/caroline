@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { HelpCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { HelpCircle } from "lucide-react";
 import { useFaqs } from "@/hooks/use-faq";
+import { useSearch } from "@/contexts/SearchContext";
 
 function FaqPage() {
   const { faqs, loading, error } = useFaqs();
+  const { searchTerm } = useSearch();
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
   const toggleFaq = (id: string) => {
@@ -18,81 +20,93 @@ function FaqPage() {
     setExpandedIds(newExpanded);
   };
 
+  const filteredFaqs = faqs.filter(
+    (faq) =>
+      faq.pergunta.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      faq.resposta.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b">
-        <div className="max-w-4xl mx-auto px-4 py-8">
-          <div className="flex items-center gap-3 mb-2">
-            <HelpCircle size={32} className="text-blue-600" />
-            <h1 className="text-3xl font-bold text-gray-900">
-              Perguntas Frequentes
-            </h1>
-          </div>
-          <p className="text-gray-600">
-            Encontre respostas para as dúvidas mais comuns
+    <div className="flex gap-8 px-8 pt-8 pb-8">
+      {/* Left Section */}
+      <div className="w-[380px] flex-shrink-0">
+        <h1 className="font-poppins font-semibold text-[28px] leading-tight text-[#1E3A5F] mb-4">
+          FAQ (Perguntas Frequentes)
+        </h1>
+        <p className="font-poppins text-sm leading-relaxed text-gray-700 mb-12 text-justify">
+          Aqui você encontrará respostas para as dúvidas mais comuns sobre nossos
+          serviços, funcionamento e políticas. Nosso objetivo é facilitar sua experiência,
+          garantindo que você tenha todas as informações de que precisa de forma
+          clara e rápida.
+        </p>
+
+        <div className="mt-24">
+          <h2 className="font-poppins font-semibold text-xl text-[#1E3A5F] mb-2">
+            Ainda precisa de ajuda?
+          </h2>
+          <p className="font-poppins text-sm text-gray-700 mb-1">
+            Fale conosco{" "}
+            <a href="#" className="text-teal-600 underline">
+              aqui
+            </a>
+            .
           </p>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      {/* Right Section - FAQ Cards */}
+      <div className="flex-1">
         {loading && (
           <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"></div>
             <p className="text-gray-500 mt-4">Carregando perguntas...</p>
           </div>
         )}
 
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-4 text-red-700">
             <strong>Erro:</strong> {error}
           </div>
         )}
 
-        {!loading && !error && faqs.length === 0 && (
-          <div className="text-center py-12 bg-white rounded-lg shadow-sm">
+        {!loading && !error && filteredFaqs.length === 0 && (
+          <div className="text-center py-12 bg-white rounded-2xl">
             <HelpCircle size={48} className="mx-auto text-gray-400 mb-4" />
             <p className="text-gray-500">
-              Ainda não há perguntas frequentes disponíveis.
+              {searchTerm
+                ? "Nenhuma pergunta encontrada para sua pesquisa."
+                : "Ainda não há perguntas frequentes disponíveis."}
             </p>
           </div>
         )}
 
-        {!loading && !error && faqs.length > 0 && (
-          <div className="space-y-3">
-            {faqs.map((faq) => {
+        {!loading && !error && filteredFaqs.length > 0 && (
+          <div className="space-y-4">
+            {filteredFaqs.map((faq) => {
               const isExpanded = expandedIds.has(faq.id);
 
               return (
                 <div
                   key={faq.id}
-                  className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-all"
+                  className="rounded-2xl overflow-hidden bg-[#8DD3C7]"
                 >
                   <button
                     onClick={() => toggleFaq(faq.id)}
-                    className="w-full px-6 py-4 flex items-start justify-between gap-4 hover:bg-gray-50 transition-colors text-left"
+                    className="w-full px-6 py-5 flex items-center gap-4 text-left hover:opacity-90 transition-opacity"
                   >
-                    <div className="flex items-start gap-3 flex-1 min-w-0">
-                      <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm flex-shrink-0 mt-0.5">
-                        {faq.ordem}
-                      </span>
-                      <h3 className="text-lg font-semibold text-gray-900 break-words">
-                        {faq.pergunta}
-                      </h3>
+                    <div className="flex-shrink-0">
+                      <div className="w-6 h-6 rounded-full border-2 border-[#1E3A5F] flex items-center justify-center">
+                        <HelpCircle size={14} className="text-[#1E3A5F]" />
+                      </div>
                     </div>
-                    <div className="flex-shrink-0 text-gray-400">
-                      {isExpanded ? (
-                        <ChevronUp size={24} />
-                      ) : (
-                        <ChevronDown size={24} />
-                      )}
-                    </div>
+                    <h3 className="flex-1 font-poppins font-semibold text-base text-[#1E3A5F]">
+                      {faq.ordem}. {faq.pergunta}
+                    </h3>
                   </button>
 
                   {isExpanded && (
-                    <div className="px-6 pb-4 ml-11 border-t border-gray-100 pt-4">
-                      <p className="text-gray-700 whitespace-pre-wrap break-words">
+                    <div className="px-6 pb-5 pl-16">
+                      <p className="font-poppins text-sm text-[#1E3A5F] leading-relaxed text-justify">
                         {faq.resposta}
                       </p>
                     </div>
@@ -100,21 +114,6 @@ function FaqPage() {
                 </div>
               );
             })}
-          </div>
-        )}
-
-        {/* CTA */}
-        {!loading && !error && faqs.length > 0 && (
-          <div className="mt-8 p-6 bg-blue-50 border border-blue-200 rounded-lg text-center">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Não encontrou o que procurava?
-            </h3>
-            <p className="text-gray-600 mb-4">
-              Entre em contato conosco e teremos prazer em ajudá-lo!
-            </p>
-            <button className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-              Entrar em Contato
-            </button>
           </div>
         )}
       </div>

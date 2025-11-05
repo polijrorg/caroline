@@ -1,13 +1,13 @@
 'use client'
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 import PasswordRequirement from "./PasswordRequirement";
 import RequiredTag from "@/components/input/RequiredTag";
 import { hasLowercase, hasMinLength, hasNumber, hasUppercase, validatePassword } from "@/utils";
 
 import { toast } from "react-hot-toast";
-import { redirect } from "next/navigation";
 
 import dynamic from 'next/dynamic';
 
@@ -15,6 +15,7 @@ const CredentialsButton = dynamic(() => import('@/components/auth/CredentialsBut
 const ValidatedInput = dynamic(() => import('@/components/input/ValidatedInput'));
 
 function CadastroForm() {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
   const [sobrenome, setSobrenome] = useState('');
@@ -92,9 +93,10 @@ function CadastroForm() {
       } else {
         toast.success(`Bem-vindo(a), ${name}!`);
         
+        // Redireciona para o login após cadastro bem-sucedido
         setTimeout(() => {
-          redirect('/login');
-        }, 1000);
+          router.push('/login');
+        }, 0);
       }
     } catch (error: unknown) {
       console.error('Signup error:', error);
