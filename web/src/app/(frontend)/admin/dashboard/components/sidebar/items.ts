@@ -39,5 +39,6 @@ export const items = [
     title: "Admins",
     url: `${baseUrl}/admins`,
     icon: ShieldUser,
+    requireSuperAdmin: true, // Apenas SUPER_ADMIN pode acessar
   },
 ]
