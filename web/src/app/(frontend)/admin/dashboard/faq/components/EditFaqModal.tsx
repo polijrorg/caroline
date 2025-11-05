@@ -7,7 +7,7 @@ import { Faq, UpdateFaqDTO } from "@/types/faq";
 interface EditFaqModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (id: string, data: UpdateFaqDTO) => Promise<void>;
+  onSubmit: (id: string, data: UpdateFaqDTO) => Promise<Faq>;
   faq: Faq | null;
 }
 

@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { X } from "lucide-react";
-import { CreateModuloDTO } from "@/types/modulos-aulas";
+import { CreateModuloDTO, Modulo } from "@/types/modulos-aulas";
 
 interface CreateModuloModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: CreateModuloDTO) => Promise<void>;
+  onSubmit: (data: CreateModuloDTO) => Promise<Modulo>;
 }
 
 export function CreateModuloModal({ isOpen, onClose, onSubmit }: CreateModuloModalProps) {

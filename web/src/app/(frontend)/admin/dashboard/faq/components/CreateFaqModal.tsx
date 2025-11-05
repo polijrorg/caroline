@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import { CreateFaqDTO } from "@/types/faq";
+import { Faq } from "@/generated/prisma";
 
 interface CreateFaqModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: CreateFaqDTO) => Promise<void>;
+  onSubmit: (data: CreateFaqDTO) => Promise<Faq>;
 }
 
 export function CreateFaqModal({ isOpen, onClose, onSubmit }: CreateFaqModalProps) {
