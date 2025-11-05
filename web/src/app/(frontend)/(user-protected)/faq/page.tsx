@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { HelpCircle } from "lucide-react";
+import { HelpCircle, ChevronDown } from "lucide-react";
 import { useFaqs } from "@/hooks/use-faq";
 import { useSearch } from "@/contexts/SearchContext";
 
@@ -29,7 +29,7 @@ function FaqPage() {
   return (
     <div className="flex gap-8 px-8 pt-8 pb-8">
       {/* Left Section */}
-      <div className="w-[380px] flex-shrink-0">
+      <div className="w-[440px] flex-shrink-0">
         <h1 className="font-poppins font-semibold text-[28px] leading-tight text-[#1E3A5F] mb-4">
           FAQ (Perguntas Frequentes)
         </h1>
@@ -93,6 +93,8 @@ function FaqPage() {
                   <button
                     onClick={() => toggleFaq(faq.id)}
                     className="w-full px-6 py-5 flex items-center gap-4 text-left hover:opacity-90 transition-opacity"
+                    aria-expanded={isExpanded}
+                    aria-label={`${isExpanded ? 'Fechar' : 'Abrir'} pergunta: ${faq.pergunta}`}
                   >
                     <div className="flex-shrink-0">
                       <div className="w-6 h-6 rounded-full border-2 border-[#1E3A5F] flex items-center justify-center">
@@ -102,6 +104,12 @@ function FaqPage() {
                     <h3 className="flex-1 font-poppins font-semibold text-base text-[#1E3A5F]">
                       {faq.ordem}. {faq.pergunta}
                     </h3>
+                    <ChevronDown 
+                      size={20} 
+                      className={`text-[#1E3A5F] transition-transform duration-300 ${
+                        isExpanded ? 'rotate-180' : ''
+                      }`}
+                    />
                   </button>
 
                   {isExpanded && (

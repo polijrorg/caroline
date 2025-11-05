@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import useSWR from "swr";
 import { 
   Modulo, 
   Aula,
@@ -13,33 +13,26 @@ import {
 } from "@/types/modulos-aulas";
 import * as api from "@/lib/api/modulos-aulas";
 
-// Hook para gerenciar módulos
+// Hook para gerenciar módulos com SWR
 export function useModulos() {
-  const [modulos, setModulos] = useState<Modulo[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const loadModulos = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await api.getAllModulos();
-      setModulos(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro desconhecido");
-    } finally {
-      setLoading(false);
+  const {
+    data: modulos = [],
+    error,
+    isLoading: loading,
+    mutate,
+  } = useSWR<Modulo[]>(
+    "/api/modulos",
+    api.getAllModulos,
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 30000, // 30 segundos de cache
     }
-  };
-
-  useEffect(() => {
-    loadModulos();
-  }, []);
+  );
 
   const createModulo = async (data: CreateModuloDTO) => {
     try {
       const newModulo = await api.createModulo(data);
-      setModulos((prev) => [...prev, newModulo].sort((a, b) => a.ordem - b.ordem));
+      mutate([...modulos, newModulo].sort((a, b) => a.ordem - b.ordem), false);
       return newModulo;
     } catch (err) {
       throw err;
@@ -49,8 +42,9 @@ export function useModulos() {
   const updateModulo = async (id: string, data: UpdateModuloDTO) => {
     try {
       const updated = await api.updateModulo(id, data);
-      setModulos((prev) =>
-        prev.map((m) => (m.id === id ? updated : m)).sort((a, b) => a.ordem - b.ordem)
+      mutate(
+        modulos.map((m) => (m.id === id ? updated : m)).sort((a, b) => a.ordem - b.ordem),
+        false
       );
       return updated;
     } catch (err) {
@@ -61,7 +55,7 @@ export function useModulos() {
   const deleteModulo = async (id: string) => {
     try {
       await api.deleteModulo(id);
-      setModulos((prev) => prev.filter((m) => m.id !== id));
+      mutate(modulos.filter((m) => m.id !== id), false);
     } catch (err) {
       throw err;
     }
@@ -70,7 +64,7 @@ export function useModulos() {
   const reorderModulos = async (data: ReorderModulosDTO) => {
     try {
       const updated = await api.reorderModulos(data);
-      setModulos(updated.sort((a, b) => a.ordem - b.ordem));
+      mutate(updated.sort((a, b) => a.ordem - b.ordem), false);
       return updated;
     } catch (err) {
       throw err;
@@ -80,8 +74,8 @@ export function useModulos() {
   return {
     modulos,
     loading,
-    error,
-    refresh: loadModulos,
+    error: error ? (error instanceof Error ? error.message : "Erro desconhecido") : null,
+    refresh: () => mutate(),
     createModulo,
     updateModulo,
     deleteModulo,
@@ -89,36 +83,33 @@ export function useModulos() {
   };
 }
 
-// Hook para gerenciar aulas
+// Hook para gerenciar aulas com SWR
 export function useAulas(moduloId?: string) {
-  const [aulas, setAulas] = useState<Aula[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const loadAulas = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await api.getAllAulas();
-      const filtered = moduloId 
-        ? data.filter((a) => a.moduloId === moduloId)
-        : data;
-      setAulas(filtered);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro desconhecido");
-    } finally {
-      setLoading(false);
+  const key = moduloId ? `/api/aulas?moduloId=${moduloId}` : "/api/aulas";
+  
+  const {
+    data: allAulas = [],
+    error,
+    isLoading: loading,
+    mutate,
+  } = useSWR<Aula[]>(
+    key,
+    api.getAllAulas,
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 30000, // 30 segundos de cache
     }
-  };
+  );
 
-  useEffect(() => {
-    loadAulas();
-  }, [moduloId]);
+  // Filtra aulas por moduloId se fornecido
+  const aulas = moduloId 
+    ? allAulas.filter((a) => a.moduloId === moduloId)
+    : allAulas;
 
   const createAula = async (data: CreateAulaDTO) => {
     try {
       const newAula = await api.createAula(data);
-      setAulas((prev) => [...prev, newAula].sort((a, b) => a.ordem - b.ordem));
+      mutate([...allAulas, newAula].sort((a, b) => a.ordem - b.ordem), false);
       return newAula;
     } catch (err) {
       throw err;
@@ -128,8 +119,9 @@ export function useAulas(moduloId?: string) {
   const updateAula = async (id: string, data: UpdateAulaDTO) => {
     try {
       const updated = await api.updateAula(id, data);
-      setAulas((prev) =>
-        prev.map((a) => (a.id === id ? updated : a)).sort((a, b) => a.ordem - b.ordem)
+      mutate(
+        allAulas.map((a) => (a.id === id ? updated : a)).sort((a, b) => a.ordem - b.ordem),
+        false
       );
       return updated;
     } catch (err) {
@@ -140,7 +132,7 @@ export function useAulas(moduloId?: string) {
   const deleteAula = async (id: string) => {
     try {
       await api.deleteAula(id);
-      setAulas((prev) => prev.filter((a) => a.id !== id));
+      mutate(allAulas.filter((a) => a.id !== id), false);
     } catch (err) {
       throw err;
     }
@@ -149,11 +141,8 @@ export function useAulas(moduloId?: string) {
   const reorderAulas = async (data: ReorderAulasDTO) => {
     try {
       const updated = await api.reorderAulas(data);
-      const filtered = moduloId
-        ? updated.filter((a) => a.moduloId === moduloId)
-        : updated;
-      setAulas(filtered.sort((a, b) => a.ordem - b.ordem));
-      return filtered;
+      mutate(updated.sort((a, b) => a.ordem - b.ordem), false);
+      return updated;
     } catch (err) {
       throw err;
     }
@@ -162,8 +151,8 @@ export function useAulas(moduloId?: string) {
   return {
     aulas,
     loading,
-    error,
-    refresh: loadAulas,
+    error: error ? (error instanceof Error ? error.message : "Erro desconhecido") : null,
+    refresh: () => mutate(),
     createAula,
     updateAula,
     deleteAula,
@@ -171,33 +160,26 @@ export function useAulas(moduloId?: string) {
   };
 }
 
-// Hook para aulas disponíveis (usuário comum)
+// Hook para aulas disponíveis (usuário comum) com SWR
 export function useAvailableAulas() {
-  const [aulas, setAulas] = useState<Aula[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const loadAulas = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await api.getAvailableAulas();
-      setAulas(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro desconhecido");
-    } finally {
-      setLoading(false);
+  const {
+    data: aulas = [],
+    error,
+    isLoading: loading,
+    mutate,
+  } = useSWR<Aula[]>(
+    "/api/aulas/available",
+    api.getAvailableAulas,
+    {
+      revalidateOnFocus: true, // Revalida ao focar (pode haver novas aulas disponíveis)
+      dedupingInterval: 60000, // 1 minuto de cache
     }
-  };
-
-  useEffect(() => {
-    loadAulas();
-  }, []);
+  );
 
   return {
     aulas,
     loading,
-    error,
-    refresh: loadAulas,
+    error: error ? (error instanceof Error ? error.message : "Erro desconhecido") : null,
+    refresh: () => mutate(),
   };
 }

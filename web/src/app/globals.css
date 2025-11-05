@@ -25,6 +25,10 @@ body {
   background-color: var(--color-azulProfundo);
 }
 
+button {
+  cursor: pointer;
+}
+
 @utility main-header {
   font-size: 48px;
   font-weight: 700;

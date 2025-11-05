@@ -103,10 +103,6 @@ export function CreateFaqModal({ isOpen, onClose, onSubmit }: CreateFaqModalProp
                 disabled={loading}
               />
             </div>
-
-            <div className="text-sm text-gray-500">
-              💡 A ordem da FAQ será calculada automaticamente
-            </div>
           </div>
 
           {/* Actions */}

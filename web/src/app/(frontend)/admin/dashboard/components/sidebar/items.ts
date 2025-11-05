@@ -20,41 +20,20 @@ export const items = [
   },
   {
     marginTop: true,
-    title: "Matérias",
-    url: `${baseUrl}/materias`,
-    icon: LibraryBig,
-  },
-  {
-    title: "Cursos",
-    url: `${baseUrl}/cursos`,
+    title: "Módulos",
+    url: `${baseUrl}/modulos`,
     icon: GraduationCap,
   },
   {
-    marginTop: true,
-    title: "Tópicos",
-    url: `${baseUrl}/topicos`,
+    title: "Aulas",
+    url: `${baseUrl}/aulas`,
     icon: List,
   },
   {
-    title: "Lições",
-    url: `${baseUrl}/licoes`,
-    icon: BookCopy,
-  },
-  {
-    title: "Simulações",
-    url: `${baseUrl}/simulacoes`,
-    icon: Laptop,
-  },
-  {
     marginTop: true,
-    title: "Escolas",
-    url: `${baseUrl}/escolas`,
-    icon: Building2,
-  },
-  {
-    title: "Usuários",
-    url: `${baseUrl}/users`,
-    icon: Users,
+    title: "FAQs",
+    url: `${baseUrl}/faq`,
+    icon: LibraryBig,
   },
   {
     title: "Admins",

@@ -1,36 +1,31 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import useSWR from "swr";
 import { Faq, CreateFaqDTO, UpdateFaqDTO, ReorderFaqsDTO } from "@/types/faq";
 import * as api from "@/lib/api/faq";
 
-// Hook para gerenciar FAQs
+// Hook para gerenciar FAQs com SWR para caching
 export function useFaqs() {
-  const [faqs, setFaqs] = useState<Faq[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const loadFaqs = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await api.getAllFaqs();
-      setFaqs(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro desconhecido");
-    } finally {
-      setLoading(false);
+  const {
+    data: faqs = [],
+    error,
+    isLoading: loading,
+    mutate,
+  } = useSWR<Faq[]>(
+    "/api/faq",
+    api.getAllFaqs,
+    {
+      revalidateOnFocus: false, // FAQs não mudam com frequência
+      revalidateOnReconnect: false,
+      dedupingInterval: 60000, // 1 minuto de cache
     }
-  };
-
-  useEffect(() => {
-    loadFaqs();
-  }, []);
+  );
 
   const createFaq = async (data: CreateFaqDTO) => {
     try {
       const newFaq = await api.createFaq(data);
-      setFaqs((prev) => [...prev, newFaq].sort((a, b) => a.ordem - b.ordem));
+      // Atualiza o cache otimisticamente
+      mutate([...faqs, newFaq].sort((a, b) => a.ordem - b.ordem), false);
       return newFaq;
     } catch (err) {
       throw err;
@@ -40,8 +35,10 @@ export function useFaqs() {
   const updateFaq = async (id: string, data: UpdateFaqDTO) => {
     try {
       const updated = await api.updateFaq(id, data);
-      setFaqs((prev) =>
-        prev.map((f) => (f.id === id ? updated : f)).sort((a, b) => a.ordem - b.ordem)
+      // Atualiza o cache otimisticamente
+      mutate(
+        faqs.map((f) => (f.id === id ? updated : f)).sort((a, b) => a.ordem - b.ordem),
+        false
       );
       return updated;
     } catch (err) {
@@ -52,7 +49,8 @@ export function useFaqs() {
   const deleteFaq = async (id: string) => {
     try {
       await api.deleteFaq(id);
-      setFaqs((prev) => prev.filter((f) => f.id !== id));
+      // Atualiza o cache otimisticamente
+      mutate(faqs.filter((f) => f.id !== id), false);
     } catch (err) {
       throw err;
     }
@@ -61,7 +59,8 @@ export function useFaqs() {
   const reorderFaqs = async (data: ReorderFaqsDTO) => {
     try {
       const updated = await api.reorderFaqs(data);
-      setFaqs(updated.sort((a, b) => a.ordem - b.ordem));
+      // Atualiza o cache otimisticamente
+      mutate(updated.sort((a, b) => a.ordem - b.ordem), false);
       return updated;
     } catch (err) {
       throw err;
@@ -71,8 +70,8 @@ export function useFaqs() {
   return {
     faqs,
     loading,
-    error,
-    refresh: loadFaqs,
+    error: error ? (error instanceof Error ? error.message : "Erro desconhecido") : null,
+    refresh: () => mutate(),
     createFaq,
     updateFaq,
     deleteFaq,
