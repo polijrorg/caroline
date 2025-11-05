@@ -1,32 +1,51 @@
 "use client";
 
 import useSWR from "swr";
-import { AdminUser, UpdateUserRoleDTO } from "@/types/admins";
+import { AdminUser, UpdateUserRoleDTO, AdminUsersResponse } from "@/types/admins";
 import * as api from "@/lib/api/admins";
 
-export function useAdminUsers() {
+interface UseAdminUsersOptions {
+  search?: string;
+  page?: number;
+  limit?: number;
+}
+
+export function useAdminUsers(options?: UseAdminUsersOptions) {
+  const { search, page = 1, limit = 50 } = options || {};
+  
+  const key = search || page !== 1 || limit !== 50
+    ? `/api/admins?search=${search || ""}&page=${page}&limit=${limit}`
+    : "/api/admins";
+
   const {
-    data: users = [],
+    data,
     error,
     isLoading: loading,
     mutate,
-  } = useSWR<AdminUser[]>(
-    "/api/admins",
-    api.getAllUsers,
+  } = useSWR<AdminUsersResponse>(
+    key,
+    () => api.getAllUsers({ search, page, limit }),
     {
       revalidateOnFocus: false,
       dedupingInterval: 30000, // 30 segundos
     }
   );
 
-  const updateUserRole = async (userId: string, data: UpdateUserRoleDTO) => {
+  const updateUserRole = async (userId: string, roleData: UpdateUserRoleDTO) => {
     try {
-      const updated = await api.updateUserRole(userId, data);
+      const updated = await api.updateUserRole(userId, roleData);
+      
       // Atualiza o cache otimisticamente
-      mutate(
-        users.map((u) => (u.id === userId ? updated : u)),
-        false
-      );
+      if (data) {
+        mutate(
+          {
+            users: data.users.map((u: AdminUser) => (u.id === userId ? updated : u)),
+            total: data.total,
+          },
+          false
+        );
+      }
+      
       return updated;
     } catch (err) {
       throw err;
@@ -34,7 +53,8 @@ export function useAdminUsers() {
   };
 
   return {
-    users,
+    users: data?.users || [],
+    total: data?.total || 0,
     loading,
     error: error ? (error instanceof Error ? error.message : "Erro desconhecido") : null,
     refresh: () => mutate(),

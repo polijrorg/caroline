@@ -1,9 +1,22 @@
-import { AdminUser, UpdateUserRoleDTO } from "@/types/admins";
+import { AdminUser, UpdateUserRoleDTO, AdminUsersResponse } from "@/types/admins";
 
 const BASE_URL = "/api/admins";
 
-export async function getAllUsers(): Promise<AdminUser[]> {
-  const response = await fetch(BASE_URL);
+interface GetAllUsersOptions {
+  search?: string;
+  page?: number;
+  limit?: number;
+}
+
+export async function getAllUsers(options?: GetAllUsersOptions): Promise<AdminUsersResponse> {
+  const params = new URLSearchParams();
+  
+  if (options?.search) params.append("search", options.search);
+  if (options?.page) params.append("page", options.page.toString());
+  if (options?.limit) params.append("limit", options.limit.toString());
+  
+  const url = params.toString() ? `${BASE_URL}?${params}` : BASE_URL;
+  const response = await fetch(url);
   
   if (!response.ok) {
     const error = await response.json();

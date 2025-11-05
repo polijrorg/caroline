@@ -2,20 +2,45 @@ import prisma from "@/backend/services/db";
 import { UpdateUserRoleInput } from "../../schemas/admins.schema";
 import { Role } from "@/generated/prisma";
 
-export async function getAllUsersWithRoles() {
-  return await prisma.user.findMany({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      createdAt: true,
-    },
-    orderBy: [
-      { role: "asc" },
-      { name: "asc" },
-    ],
-  });
+interface GetUsersOptions {
+  search?: string;
+  skip?: number;
+  take?: number;
+}
+
+export async function getAllUsersWithRoles(options?: GetUsersOptions) {
+  const { search, skip = 0, take = 50 } = options || {};
+  
+  const where = search
+    ? {
+        OR: [
+          { email: { contains: search, mode: "insensitive" as const } },
+          { name: { contains: search, mode: "insensitive" as const } },
+        ],
+      }
+    : undefined;
+
+  const [users, total] = await Promise.all([
+    prisma.user.findMany({
+      where,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+      },
+      orderBy: [
+        { role: "asc" },
+        { name: "asc" },
+      ],
+      skip,
+      take,
+    }),
+    prisma.user.count({ where }),
+  ]);
+
+  return { users, total };
 }
 
 export async function updateUserRole(id: string, role: UpdateUserRoleInput["role"]) {

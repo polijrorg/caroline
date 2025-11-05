@@ -2,12 +2,9 @@ import {
   ChartColumnIncreasing, 
   LibraryBig,
   GraduationCap, 
-  Laptop,
   List,
-  BookCopy,
-  Building2,
-  Users,
-  ShieldUser
+  ShieldUser,
+  Users
 } from "lucide-react";
 
 const baseUrl = '/admin/dashboard';
@@ -36,9 +33,16 @@ export const items = [
     icon: LibraryBig,
   },
   {
+    marginTop: true,
+    title: "Usuários",
+    url: `${baseUrl}/usuarios`,
+    icon: Users,
+    requireSuperAdmin: true,
+  },
+  {
     title: "Admins",
     url: `${baseUrl}/admins`,
     icon: ShieldUser,
-    requireSuperAdmin: true, // Apenas SUPER_ADMIN pode acessar
+    requireSuperAdmin: true,
   },
 ]

@@ -8,6 +8,11 @@ export interface AdminUser {
   createdAt: Date;
 }
 
+export interface AdminUsersResponse {
+  users: AdminUser[];
+  total: number;
+}
+
 export interface UpdateUserRoleDTO {
   role: "USER" | "ADMIN";
 }
