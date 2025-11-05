@@ -7,7 +7,7 @@ import { CreateFaqDTO } from "@/types/faq";
 interface CreateFaqModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: CreateFaqDTO) => Promise<any>;
+  onSubmit: (data: CreateFaqDTO) => Promise<void>;
 }
 
 export function CreateFaqModal({ isOpen, onClose, onSubmit }: CreateFaqModalProps) {

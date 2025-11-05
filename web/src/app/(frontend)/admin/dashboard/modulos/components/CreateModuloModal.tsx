@@ -7,7 +7,7 @@ import { CreateModuloDTO } from "@/types/modulos-aulas";
 interface CreateModuloModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: CreateModuloDTO) => Promise<any>;
+  onSubmit: (data: CreateModuloDTO) => Promise<void>;
 }
 
 export function CreateModuloModal({ isOpen, onClose, onSubmit }: CreateModuloModalProps) {
