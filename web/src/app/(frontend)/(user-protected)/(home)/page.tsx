@@ -5,7 +5,7 @@ import ProgressCard from "./ProgressCard";
 
 function HomePage() {
   return (
-    <div className="flex gap-4 justify-around mt-16 px-6">
+    <div className="flex gap-4 justify-around mt-16 px-6 pb-8">
       <div className="flex flex-col w-[50%] gap-6">
         <h3 className="font-montserrat font-medium text-2xl leading-none tracking-normal">
           Meus cursos:

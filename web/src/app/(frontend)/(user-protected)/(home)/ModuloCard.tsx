@@ -8,9 +8,9 @@ interface ModuloCardProps {
 
 function ModuloCard({titulo, descricao}: ModuloCardProps) {
   return (
-    <div className="flex flex-row w-full rounded-[40px] bg-[#90C8B6] p-8 gap-9">
+    <div className="flex flex-row w-full rounded-[40px] bg-[#90C8B6] p-6 gap-9">
       <div className="flex flex-col gap-3">  
-          <Image src="/Cerebro.png" alt="image" width={240} height={175} className="rounded-[30px]"/>
+          <Image src="/Cerebro.png" alt="image" width={200} height={140} className="rounded-[30px]"/>
           
           <button className="bg-azulProfundo rounded-[16px] w-60 h-8 py-2 px-6 text-[#FFFFFF] font-poppins font-bold text-base leading-4 tracking-[1.25px] uppercase" >Acessar módulo </button>
       </div>
