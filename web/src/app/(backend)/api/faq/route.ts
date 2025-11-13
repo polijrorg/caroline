@@ -9,7 +9,7 @@ const allowedRoles: AllowedRoutes = {
     POST: ["SUPER_ADMIN", "ADMIN"]
 };
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
         const faqs = await faqService.getAllFaqs();
         return NextResponse.json(faqs);

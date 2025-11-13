@@ -20,7 +20,7 @@ function DashboardPage() {
     if (window.confirm(`Tem certeza que deseja excluir o módulo "${titulo}"? Todas as aulas serão removidas.`)) {
       try {
         await deleteModulo(id);
-      } catch (err) {
+      } catch {
         alert("Erro ao excluir módulo");
       }
     }

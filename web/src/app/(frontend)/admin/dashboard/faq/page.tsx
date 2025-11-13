@@ -29,7 +29,7 @@ function FaqAdminPage() {
     if (window.confirm(`Tem certeza que deseja excluir a FAQ "${pergunta}"?`)) {
       try {
         await deleteFaq(id);
-      } catch (err) {
+      } catch {
         alert("Erro ao excluir FAQ");
       }
     }

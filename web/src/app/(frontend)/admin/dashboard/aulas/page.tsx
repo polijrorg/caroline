@@ -27,7 +27,7 @@ function AulasPage() {
     if (window.confirm(`Tem certeza que deseja excluir a aula "${titulo}"?`)) {
       try {
         await deleteAula(id);
-      } catch (err) {
+      } catch {
         alert("Erro ao excluir aula");
       }
     }

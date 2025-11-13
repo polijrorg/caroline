@@ -47,7 +47,11 @@ export function ExercicioAulaForm({ conteudo, onChange, disabled }: ExercicioAul
     updateExercicios(exercicios.filter((_, i) => i !== index));
   };
 
-  const atualizarExercicio = (index: number, campo: keyof Exercicio, valor: any) => {
+  const atualizarExercicio = (
+    index: number,
+    campo: keyof Exercicio,
+    valor: string | number
+  ) => {
     const novosExercicios = [...exercicios];
     novosExercicios[index] = { ...novosExercicios[index], [campo]: valor };
     updateExercicios(novosExercicios);
