@@ -1,0 +1,17 @@
+meta {
+  name: demote to user
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{baseUrl}}/{{folder}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "role": "USER"
+  }
+}

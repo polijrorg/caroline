@@ -2,12 +2,9 @@ import {
   ChartColumnIncreasing, 
   LibraryBig,
   GraduationCap, 
-  Laptop,
   List,
-  BookCopy,
-  Building2,
-  Users,
-  ShieldUser
+  ShieldUser,
+  Users
 } from "lucide-react";
 
 const baseUrl = '/admin/dashboard';
@@ -20,45 +17,32 @@ export const items = [
   },
   {
     marginTop: true,
-    title: "Matérias",
-    url: `${baseUrl}/materias`,
-    icon: LibraryBig,
-  },
-  {
-    title: "Cursos",
-    url: `${baseUrl}/cursos`,
+    title: "Módulos",
+    url: `${baseUrl}/modulos`,
     icon: GraduationCap,
   },
   {
-    marginTop: true,
-    title: "Tópicos",
-    url: `${baseUrl}/topicos`,
+    title: "Aulas",
+    url: `${baseUrl}/aulas`,
     icon: List,
   },
   {
-    title: "Lições",
-    url: `${baseUrl}/licoes`,
-    icon: BookCopy,
-  },
-  {
-    title: "Simulações",
-    url: `${baseUrl}/simulacoes`,
-    icon: Laptop,
+    marginTop: true,
+    title: "FAQs",
+    url: `${baseUrl}/faq`,
+    icon: LibraryBig,
   },
   {
     marginTop: true,
-    title: "Escolas",
-    url: `${baseUrl}/escolas`,
-    icon: Building2,
-  },
-  {
     title: "Usuários",
-    url: `${baseUrl}/users`,
+    url: `${baseUrl}/usuarios`,
     icon: Users,
+    requireSuperAdmin: true,
   },
   {
     title: "Admins",
     url: `${baseUrl}/admins`,
     icon: ShieldUser,
+    requireSuperAdmin: true,
   },
 ]

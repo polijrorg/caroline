@@ -1,0 +1,26 @@
+meta {
+  name: create
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/{{folder}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "titulo": "Módulo 1: Introdução à Programação",
+    "descricao": "Aprenda os conceitos básicos de programação, incluindo variáveis, tipos de dados e estruturas de controle."
+  }
+}
+
+script:post-response {
+  if (res.body && res.body.id) {
+    bru.setVar("moduloId", res.body.id);
+  } else {
+    console.log("No ID found in response");
+  }
+}

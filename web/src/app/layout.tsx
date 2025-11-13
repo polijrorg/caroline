@@ -10,7 +10,7 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: "RIMA",
+  title: "RiMA",
   description: "Plataforma para saúde mental",
 };
 

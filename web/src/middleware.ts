@@ -70,7 +70,7 @@ export async function middleware(request: NextRequest) {
   
   if (matchesAnyPattern(pathname, ROUTE_CONFIG.redirectIfAuth)) {
     if (isAuthenticated) {
-      return NextResponse.redirect(new URL("/teste", request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     }
     return NextResponse.next();
   }

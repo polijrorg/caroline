@@ -1,0 +1,21 @@
+meta {
+  name: update
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{baseUrl}}/{{folder}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "titulo": "Aula 1: Variáveis e Tipos de Dados (Atualizado)",
+    "descricao": "Aprenda sobre variáveis, constantes e os principais tipos de dados na programação.",
+    "tipo": "VIDEO",
+    "diaDisponivel": 1,
+    "conteudo": "https://www.youtube.com/watch?v=exemplo-atualizado"
+  }
+}

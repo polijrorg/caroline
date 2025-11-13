@@ -16,7 +16,7 @@ enum Role {
 
 model User {
   // nao mexer >
-  id            String   @id @default(uuid()) @map("_id")
+  id            String   @id @map("_id")
   name          String
   sobrenome     String
   dataNasc      DateTime
@@ -36,58 +36,6 @@ model User {
   @@map("user")
 }
 
-model Curso {
-  id        String @id @default(uuid()) @map("_id")
-  name      String
-  descricao String
-  slug      String @unique
-
-  materiasRelacionadas CursoMateriaRelacionada[]
-}
-
-model CursoMateriaRelacionada {
-  id String @id @default(uuid()) @map("_id")
-
-  curso   Curso  @relation(fields: [cursoId], references: [id])
-  cursoId String
-
-  materia   Materia @relation(fields: [materiaId], references: [id])
-  materiaId String
-
-  @@unique([cursoId, materiaId])
-}
-
-model Materia {
-  id                 String                    @id @default(uuid()) @map("_id")
-  name               String
-  descricao          String
-  cor                String
-  slug               String                    @unique
-  cursosRelacionados CursoMateriaRelacionada[]
-}
-
-model Licao {
-  id        String   @id @default(uuid()) @map("_id")
-  name      String
-  descricao String
-  archived  Boolean? @default(false)
-
-  conteudo Conteudo[]
-}
-
-model Conteudo {
-  id       String   @id @default(uuid()) @map("_id")
-  name     String
-  type     String
-  markdown String
-  order    Int      @default(0)
-  archived Boolean? @default(false)
-
-  licao   Licao?  @relation(fields: [licaoId], references: [id])
-  licaoId String?
-}
-
-// evitar mexer daqui pra baixo:
 model Session {
   id        String   @id @map("_id")
   expiresAt DateTime
@@ -137,26 +85,40 @@ model Modulo {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   titulo    String
   descricao String?
+  ordem     Int      // Ordem sequencial do módulo
   aulas     Aula[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([ordem])
+}
+
+enum TipoAula {
+  VIDEO
+  EXERCICIO
+  MARKDOWN
 }
 
 model Aula {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  titulo    String
-  conteudo  String?
-  moduloId  String   @db.ObjectId
-  modulo    Modulo   @relation(fields: [moduloId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  titulo         String
+  conteudo       String?
+  tipo           TipoAula     @default(MARKDOWN)
+  ordem          Int          // Ordem da aula dentro do módulo
+  diaDisponivel  Int          // Dia em que a aula fica disponível (contando do cadastro do usuário)
+  moduloId       String       @db.ObjectId
+  modulo         Modulo       @relation(fields: [moduloId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
   aulasFavoritas AulaFavorita[]
+
+  @@unique([moduloId, ordem])
 }
 
 model AulaFavorita {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
+  userId    String
   aulaId    String   @db.ObjectId
   createdAt DateTime @default(now())
 
@@ -164,4 +126,15 @@ model AulaFavorita {
   aula Aula @relation(fields: [aulaId], references: [id])
 
   @@unique([userId, aulaId])
+}
+
+model Faq {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  pergunta  String
+  resposta  String
+  ordem     Int      // Ordem de exibição
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([ordem])
 }
