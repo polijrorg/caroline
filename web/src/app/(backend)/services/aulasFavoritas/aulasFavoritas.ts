@@ -1,4 +1,4 @@
-import { prisma } from "@/generated/prisma";
+import prisma from "../db";
 import { CreateAulaFavoritaInput } from "../../schemas/aulasFavoritas.schema";
 
 export async function getAllFavoritasByUser(userId: string) {
