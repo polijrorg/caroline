@@ -1,17 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { List, Plus, Edit, Trash2, Calendar } from "lucide-react";
+import { List, Plus, Edit, Trash2, Calendar, ArrowUpDown } from "lucide-react";
 import AdminHeader from "../components/header/AdminHeader";
 import { useModulos, useAulas } from "@/hooks/use-modulos-aulas";
 import { CreateAulaModal } from "./components/CreateAulaModal";
+import { ReorderAulasModal } from "./components/ReorderAulasModal";
 import { TipoAulaLabels, TipoAulaIcons } from "@/types/modulos-aulas";
 
 function AulasPage() {
   const { modulos, loading: loadingModulos } = useModulos();
-  const { aulas, loading: loadingAulas, error, createAula, deleteAula } = useAulas();
+  const { aulas, loading: loadingAulas, error, createAula, deleteAula, reorderAulas } = useAulas();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isReorderModalOpen, setIsReorderModalOpen] = useState(false);
   const [selectedModuloId, setSelectedModuloId] = useState<string>("");
+  const [selectedDia, setSelectedDia] = useState<number>(1);
 
   const Paragraph = () => (
     <>
@@ -41,6 +44,22 @@ function AulasPage() {
 
   const getAulasPorModulo = (moduloId: string) => {
     return aulas.filter((aula) => aula.moduloId === moduloId);
+  };
+
+  const getAulasPorDia = (moduloId: string, dia: number) => {
+    return aulas.filter((aula) => aula.moduloId === moduloId && aula.diaDisponivel === dia);
+  };
+
+  const getDiasComAulas = (moduloId: string) => {
+    const aulasDoModulo = getAulasPorModulo(moduloId);
+    const dias = [...new Set(aulasDoModulo.map((aula) => aula.diaDisponivel))];
+    return dias.sort((a, b) => a - b);
+  };
+
+  const handleReorderClick = (moduloId: string, dia: number) => {
+    setSelectedModuloId(moduloId);
+    setSelectedDia(dia);
+    setIsReorderModalOpen(true);
   };
 
   const loading = loadingModulos || loadingAulas;
@@ -114,7 +133,7 @@ function AulasPage() {
                     </div>
                   </div>
 
-                  {/* Lista de Aulas */}
+                  {/* Lista de Aulas - Agrupadas por Dia */}
                   <div className="divide-y">
                     {aulasDoModulo.length === 0 ? (
                       <div className="p-8 text-center text-gray-500">
@@ -122,54 +141,83 @@ function AulasPage() {
                         <p className="text-sm">Nenhuma aula neste módulo ainda</p>
                       </div>
                     ) : (
-                      aulasDoModulo
-                        .sort((a, b) => a.ordem - b.ordem)
-                        .map((aula) => (
-                          <div key={aula.id} className="p-4 hover:bg-gray-50 transition-colors">
-                            <div className="flex items-start justify-between">
-                              <div className="flex-1">
-                                <div className="flex items-center gap-3 mb-2">
-                                  <span className="text-2xl">{TipoAulaIcons[aula.tipo]}</span>
-                                  <div className="flex-1">
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-sm text-gray-500">
-                                        Aula {aula.ordem}
-                                      </span>
-                                      <span className="text-gray-300">•</span>
-                                      <h4 className="font-medium text-gray-900">
-                                        {aula.titulo}
-                                      </h4>
+                      getDiasComAulas(modulo.id).map((dia) => {
+                        const aulasDoDia = getAulasPorDia(modulo.id, dia);
+                        
+                        return (
+                          <div key={dia} className="p-4">
+                            {/* Header do Dia */}
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="flex items-center gap-2">
+                                <Calendar size={16} className="text-gray-400" />
+                                <h4 className="text-sm font-semibold text-gray-700">
+                                  Dia {dia}
+                                </h4>
+                                <span className="text-xs text-gray-500">
+                                  ({aulasDoDia.length} aula{aulasDoDia.length !== 1 ? "s" : ""})
+                                </span>
+                              </div>
+                              {aulasDoDia.length > 1 && (
+                                <button
+                                  onClick={() => handleReorderClick(modulo.id, dia)}
+                                  className="text-xs px-2 py-1 text-blue-600 hover:bg-blue-50 rounded-md transition-colors flex items-center gap-1"
+                                  title="Reordenar aulas deste dia"
+                                >
+                                  <ArrowUpDown size={14} />
+                                  Reordenar
+                                </button>
+                              )}
+                            </div>
+
+                            {/* Aulas do Dia */}
+                            <div className="space-y-2">
+                              {aulasDoDia
+                                .sort((a, b) => a.ordem - b.ordem)
+                                .map((aula) => (
+                                  <div
+                                    key={aula.id}
+                                    className="flex items-start justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                                  >
+                                    <div className="flex-1">
+                                      <div className="flex items-center gap-3">
+                                        <span className="text-xl">{TipoAulaIcons[aula.tipo]}</span>
+                                        <div className="flex-1">
+                                          <div className="flex items-center gap-2">
+                                            <span className="text-xs text-gray-500">
+                                              #{aula.ordem}
+                                            </span>
+                                            <span className="text-gray-300">•</span>
+                                            <h5 className="font-medium text-gray-900">
+                                              {aula.titulo}
+                                            </h5>
+                                          </div>
+                                          <span className="text-xs px-2 py-0.5 bg-white rounded text-gray-600 inline-block mt-1">
+                                            {TipoAulaLabels[aula.tipo]}
+                                          </span>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div className="flex items-center gap-4 mt-1 text-xs text-gray-500">
-                                      <span className="px-2 py-1 bg-gray-100 rounded">
-                                        {TipoAulaLabels[aula.tipo]}
-                                      </span>
-                                      <span className="flex items-center gap-1">
-                                        <Calendar size={12} />
-                                        Dia {aula.diaDisponivel}
-                                      </span>
+                                    <div className="flex gap-2 ml-4">
+                                      <button
+                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                                        title="Editar aula"
+                                      >
+                                        <Edit size={16} />
+                                      </button>
+                                      <button
+                                        className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                                        onClick={() => handleDelete(aula.id, aula.titulo)}
+                                        title="Excluir aula"
+                                      >
+                                        <Trash2 size={16} />
+                                      </button>
                                     </div>
                                   </div>
-                                </div>
-                              </div>
-                              <div className="flex gap-2 ml-4">
-                                <button
-                                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
-                                  title="Editar aula"
-                                >
-                                  <Edit size={18} />
-                                </button>
-                                <button
-                                  className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
-                                  onClick={() => handleDelete(aula.id, aula.titulo)}
-                                  title="Excluir aula"
-                                >
-                                  <Trash2 size={18} />
-                                </button>
-                              </div>
+                                ))}
                             </div>
                           </div>
-                        ))
+                        );
+                      })
                     )}
                   </div>
                 </div>
@@ -190,6 +238,20 @@ function AulasPage() {
         }}
         modulos={modulos}
         selectedModuloId={selectedModuloId}
+      />
+
+      <ReorderAulasModal
+        isOpen={isReorderModalOpen}
+        onClose={() => {
+          setIsReorderModalOpen(false);
+          setSelectedModuloId("");
+          setSelectedDia(1);
+        }}
+        onSubmit={async (data) => {
+          await reorderAulas({ aulas: data });
+        }}
+        aulas={getAulasPorDia(selectedModuloId, selectedDia)}
+        diaDisponivel={selectedDia}
       />
     </>
   );
