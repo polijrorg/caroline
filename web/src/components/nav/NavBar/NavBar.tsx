@@ -21,9 +21,9 @@ function NavBar() {
         <Image src="/icons/NavBarIcons/estrela.png" alt="Favoritos" width={32} height={32} /> 
       </Link>
       <div className="w-18 h-[30%]" />
-      <div className="p-2 fixed bottom-[3%]"> 
+      <Link href="/logout" className="p-2 fixed bottom-[3%] cursor-pointer"> 
         <Image src="/icons/NavBarIcons/Log_Out.png" alt="Sair" width={32} height={32} /> 
-      </div>
+      </Link>
     </div>
   );
 }

@@ -111,6 +111,22 @@ function CadastroForm() {
     setLoading(false);
   }, []);
 
+  // Handlers that allow only numeric input and enforce max lengths
+  const handleDiaChange = (value: string) => {
+    const digits = value.replace(/\D/g, "");
+    setDiaNascimento(digits.slice(0, 2));
+  };
+
+  const handleMesChange = (value: string) => {
+    const digits = value.replace(/\D/g, "");
+    setMesNascimento(digits.slice(0, 2));
+  };
+
+  const handleAnoChange = (value: string) => {
+    const digits = value.replace(/\D/g, "");
+    setAnoNascimento(digits.slice(0, 4));
+  };
+
   return ( 
     <div className="flex flex-col items-center justify-center
     bg-white rounded-4xl shadow-lg lg:min-w-[540px] mt-6 pb-10">
@@ -156,9 +172,33 @@ function CadastroForm() {
                 <RequiredTag/>
               </label>
               <div className="flex gap-4">
-                <input placeholder="DD" maxLength={2} className="auth-input" value={diaNascimento} onChange={(e) => setDiaNascimento(e.target.value)} />
-                <input placeholder="MM" maxLength={2} className="auth-input" value={mesNascimento} onChange={(e) => setMesNascimento(e.target.value)} />
-                <input placeholder="YYYY" maxLength={4} className="auth-input" value={anoNascimento} onChange={(e) => setAnoNascimento(e.target.value)} />
+                <input
+                  placeholder="DD"
+                  maxLength={2}
+                  className="auth-input"
+                  value={diaNascimento}
+                  onChange={(e) => handleDiaChange(e.target.value)}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                />
+                <input
+                  placeholder="MM"
+                  maxLength={2}
+                  className="auth-input"
+                  value={mesNascimento}
+                  onChange={(e) => handleMesChange(e.target.value)}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                />
+                <input
+                  placeholder="YYYY"
+                  maxLength={4}
+                  className="auth-input"
+                  value={anoNascimento}
+                  onChange={(e) => handleAnoChange(e.target.value)}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                />
               </div>
             </div>
 
