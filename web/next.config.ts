@@ -1,4 +1,5 @@
 import { type NextConfig } from 'next';
+const path = require('path');
 
 const nextConfig: NextConfig = {
   env: {
@@ -6,6 +7,7 @@ const nextConfig: NextConfig = {
     EMAIL_FROM: process.env.EMAIL_FROM,
   },
   turbopack: {
+    root: path.join(__dirname, '..'),
     rules: {
       '*.svg': {
         as: '*.js',
