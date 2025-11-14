@@ -1,5 +1,6 @@
 import { type NextConfig } from 'next';
 const path = require('path');
+const { PrismaPlugin } = require('@prisma/nextjs-monorepo-workaround-plugin')
 
 const nextConfig: NextConfig = {
   env: {
@@ -15,7 +16,10 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  webpack(config) {
+  webpack(config, { isServer }) {
+    if (isServer) {
+      config.plugins = [...config.plugins, new PrismaPlugin()]
+    }
     config.module.rules.push({
       test: /\.svg$/i,
       use: ['@svgr/webpack'],
